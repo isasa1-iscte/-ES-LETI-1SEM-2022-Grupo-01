@@ -3,4 +3,16 @@
   <groupId>Grupo01</groupId>
   <artifactId>ES</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.13.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.mnode.ical4j</groupId>
+  		<artifactId>ical4j</artifactId>
+  		<version>4.0.0-beta3</version>
+  	</dependency>
+  </dependencies>
 </project>
