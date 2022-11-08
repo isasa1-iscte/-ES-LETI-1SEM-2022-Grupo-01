@@ -29,31 +29,25 @@ public class CalendarioFenix {
 			if(inputLine.compareTo("BEGIN:VEVENT")==0) {
 				jsonStringI = jsonStringI +"{"  + inputLine + "," ;
 				isInsideEvent = true;
-				writer.write(jsonStringI);
 			}
 			else if (inputLine.contains("DTSTART:")) {
 				jsonStringI = jsonStringI + inputLine + "," ;
-				writer.write(jsonStringI);
 			}
 			else if (inputLine.contains("DTEND:")) {
 				jsonStringI = jsonStringI + inputLine + "," ;
-				writer.write(jsonStringI);
 			}
 			else if (inputLine.contains("SUMMARY:")) {
 				jsonStringI = jsonStringI + inputLine + "," ;
-				writer.write(jsonStringI);
 			}
 			else if (inputLine.contains("LOCATION:")) {
 				jsonStringI = jsonStringI + inputLine + "," ;
-				writer.write(jsonStringI);
 			}
 			else if(inputLine.compareTo("END:VEVENT")==0 && isInsideEvent) {
 				jsonStringI = jsonStringI + inputLine + "}";
-				writer.write(jsonStringI);
 			}
 		}
 		jsonStringI += "]";
-		writer.write("]");
+		writer.write(jsonStringI);
 //		System.out.println(jsonStringI);
 		br.close();
 		writer.close();
