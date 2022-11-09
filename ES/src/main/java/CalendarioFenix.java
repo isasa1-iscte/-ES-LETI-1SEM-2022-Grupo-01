@@ -1,11 +1,17 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import javax.net.ssl.HttpsURLConnection;
-import java.io.FileWriter;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CalendarioFenix {
 
@@ -43,13 +49,20 @@ public class CalendarioFenix {
 				jsonStringI = jsonStringI + inputLine + "," ;
 			}
 			else if(inputLine.compareTo("END:VEVENT")==0 && isInsideEvent) {
-				jsonStringI = jsonStringI + inputLine + "}";
+				jsonStringI = jsonStringI + inputLine + "},\n";
 			}
 		}
 		jsonStringI += "]";
 		writer.write(jsonStringI);
-//		System.out.println(jsonStringI);
+		//		System.out.println(jsonStringI);
 		br.close();
 		writer.close();
+
+		ArrayList<String> eventos = new ArrayList<String>();
+		Scanner sc=new Scanner(jsonInes);
+		while(sc.hasNextLine()){
+			eventos.add(sc.nextLine());
+		}
+		sc.close();
 	}
 }
