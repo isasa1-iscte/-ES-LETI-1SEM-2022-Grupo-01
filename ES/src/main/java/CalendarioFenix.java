@@ -28,41 +28,44 @@ public class CalendarioFenix {
 		String inputLine;
 		File jsonInes = new File("jsonInes.txt");
 		FileWriter writer = new FileWriter(jsonInes);
-		String jsonStringI = "[";
+		String jsonStringI = "[\n";
 		boolean isInsideEvent = false;
 
 		while ((inputLine = br.readLine()) != null) {
 			if(inputLine.compareTo("BEGIN:VEVENT")==0) {
-				jsonStringI = jsonStringI +"{"  + inputLine + "," ;
+				jsonStringI = jsonStringI +"{\n"  + inputLine + ",\n" ;
 				isInsideEvent = true;
 			}
 			else if (inputLine.contains("DTSTART:")) {
-				jsonStringI = jsonStringI + inputLine + "," ;
+				jsonStringI = jsonStringI + inputLine + ",\n" ;
 			}
 			else if (inputLine.contains("DTEND:")) {
-				jsonStringI = jsonStringI + inputLine + "," ;
+				jsonStringI = jsonStringI + inputLine + ",\n" ;
 			}
 			else if (inputLine.contains("SUMMARY:")) {
-				jsonStringI = jsonStringI + inputLine + "," ;
+				jsonStringI = jsonStringI + inputLine + ",\n" ;
 			}
 			else if (inputLine.contains("LOCATION:")) {
-				jsonStringI = jsonStringI + inputLine + "," ;
+				jsonStringI = jsonStringI + inputLine + ",\n" ;
 			}
 			else if(inputLine.compareTo("END:VEVENT")==0 && isInsideEvent) {
-				jsonStringI = jsonStringI + inputLine + "},\n";
+				jsonStringI = jsonStringI + inputLine + ",\n}\n";
 			}
 		}
-		jsonStringI += "]";
+		jsonStringI += " ]";
 		writer.write(jsonStringI);
-		//		System.out.println(jsonStringI);
+		
 		br.close();
 		writer.close();
+//
+//		ArrayList<String> eventos = new ArrayList<String>();
+//		Scanner scanner=new Scanner(jsonInes);
+//		while(scanner.hasNextLine()){
+//			eventos.add(scanner.nextLine());
+//		}
+//		scanner.close();
 
-		ArrayList<String> eventos = new ArrayList<String>();
-		Scanner sc=new Scanner(jsonInes);
-		while(sc.hasNextLine()){
-			eventos.add(sc.nextLine());
-		}
-		sc.close();
+		System.out.println();
+
 	}
 }
