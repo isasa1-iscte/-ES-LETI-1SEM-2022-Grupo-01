@@ -5,13 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
-//import org.json.JSONArray;
-//import org.json.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CalendarioFenix {
 
@@ -25,47 +20,87 @@ public class CalendarioFenix {
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
 
+		String httpsURLH = "https://fenix.iscte-iul.pt/publico/publicPersonICalendar.do?method=iCalendar&username=hmsea@iscte.pt&password=S98lQuMJLj5SbJOigxwvkhW6NxnbFjvrqtznetteK3nR04ozgL7BgMqEOPKFzgLMcaiXi5Ygjral29BCRkBmF9V3FTdkrne6yYxETDRIEapjhD8tOiGR5pB811UH8Pti";
+		URL hURL = new URL(httpsURLH);
+		HttpsURLConnection urlConnectionH = (HttpsURLConnection)hURL.openConnection();
+		InputStream is2 = urlConnectionH.getInputStream();
+		InputStreamReader isr2 = new InputStreamReader(is2);
+		BufferedReader br2 = new BufferedReader(isr2);
+
 		String inputLine;
 		File jsonInes = new File("jsonInes.txt");
 		FileWriter writer = new FileWriter(jsonInes);
 		String jsonStringI = "[\n";
 		boolean isInsideEvent = false;
+		String inputLineHugo;
+		File jsonHugo = new File("jsonHugo.txt");
+		FileWriter writerHugo = new FileWriter(jsonHugo);
+		String jsonStringH = "[\n";
+		boolean isInsideEvent2 = false;
 
 		while ((inputLine = br.readLine()) != null) {
 			if(inputLine.compareTo("BEGIN:VEVENT")==0) {
-				jsonStringI = jsonStringI +"{\n"  + inputLine + ",\n" ;
+				jsonStringI = jsonStringI + "\"BEGIN\":\"VEVENT\",\n";
 				isInsideEvent = true;
 			}
-			else if (inputLine.contains("DTSTART:")) {
-				jsonStringI = jsonStringI + inputLine + ",\n" ;
+			if (inputLine.contains("DTSTART:")) {
+				inputLine = inputLine.replace("DTSTART:", "");
+				jsonStringI = jsonStringI + "\"DTSTART\":\"" + inputLine +"\",\n" ;
 			}
-			else if (inputLine.contains("DTEND:")) {
-				jsonStringI = jsonStringI + inputLine + ",\n" ;
+			if (inputLine.contains("DTEND:")) {
+				inputLine = inputLine.replace("DTEND:", "");
+				jsonStringI = jsonStringI + "\"DTEND\":\"" + inputLine +"\",\n" ;
 			}
-			else if (inputLine.contains("SUMMARY:")) {
-				jsonStringI = jsonStringI + inputLine + ",\n" ;
+			if (inputLine.contains("SUMMARY:")) {
+				inputLine = inputLine.replace("SUMMARY:", "");
+				jsonStringI = jsonStringI + "\"SUMMARY\":\"" + inputLine +"\",\n" ;
 			}
-			else if (inputLine.contains("LOCATION:")) {
-				jsonStringI = jsonStringI + inputLine + ",\n" ;
+			if (inputLine.contains("LOCATION:")) {
+				inputLine = inputLine.replace("LOCATION:", "");
+				jsonStringI = jsonStringI + "\"LOCATION\":\"" + inputLine +"\",\n" ;
 			}
 			else if(inputLine.compareTo("END:VEVENT")==0 && isInsideEvent) {
-				jsonStringI = jsonStringI + inputLine + ",\n}\n";
+				jsonStringI = jsonStringI + "\"END\":\"VEVENT\",\n}\n";
 			}
 		}
-		jsonStringI += " ]";
+		jsonStringI += "]";
 		writer.write(jsonStringI);
-		
+
 		br.close();
 		writer.close();
-//
-//		ArrayList<String> eventos = new ArrayList<String>();
-//		Scanner scanner=new Scanner(jsonInes);
-//		while(scanner.hasNextLine()){
-//			eventos.add(scanner.nextLine());
-//		}
-//		scanner.close();
+	
+		while ((inputLineHugo = br2.readLine()) != null) {
+			if(inputLineHugo.compareTo("BEGIN:VEVENT")==0) {
+				jsonStringH = jsonStringH +"\"BEGIN\":\"VEVENT\",\n" ;
+				isInsideEvent2 = true;
+			}
+			else if (inputLineHugo.contains("DTSTART:")) {
+				inputLineHugo = inputLineHugo.replace("DTSTART:", "");
+				jsonStringH = jsonStringH + "\"DTSTART\":\"" + inputLineHugo + "\",\n" ;
+			}
+			else if (inputLineHugo.contains("DTEND:")) {
+				inputLineHugo = inputLineHugo.replace("DTEND:", "");
+				jsonStringH = jsonStringH + "\"DTEND\":\"" + inputLineHugo + "\",\n" ;
+			}
+			else if (inputLineHugo.contains("SUMMARY:")) {
+				inputLineHugo = inputLineHugo.replace("SUMMARY:", "");
+				jsonStringH = jsonStringH + "\"SUMMARY\":\"" + inputLineHugo + "\",\n" ;
+			}
+			else if (inputLineHugo.contains("LOCATION:")) {
+				inputLineHugo = inputLineHugo.replace("LOCATION:", "");
+				jsonStringH = jsonStringH + "\"LOCATION\":\"" + inputLineHugo + "\",\n" ;
+			}
+			else if(inputLineHugo.compareTo("END:VEVENT")==0 && isInsideEvent2) {
+				jsonStringH = jsonStringH + "\"END\":\"VEVENT\",\n}\n";
+			}
+		}
 
-		System.out.println();
-
+		jsonStringH += "]";
+		writerHugo.write(jsonStringH);
+			System.out.println(jsonStringH);
+		br2.close();
+		writerHugo.close();
+		
 	}
+
 }
