@@ -32,75 +32,86 @@ public class CalendarioFenix {
 		FileWriter writer = new FileWriter(jsonInes);
 		String jsonStringI = "[\n";
 		boolean isInsideEvent = false;
+
+
 		String inputLineHugo;
 		File jsonHugo = new File("jsonHugo.txt");
 		FileWriter writerHugo = new FileWriter(jsonHugo);
 		String jsonStringH = "[\n";
 		boolean isInsideEvent2 = false;
 
-		while ((inputLine = br.readLine()) != null) {
-			if(inputLine.compareTo("BEGIN:VEVENT")==0) {
-				jsonStringI = jsonStringI + "\"BEGIN\":\"VEVENT\",\n";
-				isInsideEvent = true;
-			}
-			if (inputLine.contains("DTSTART:")) {
-				inputLine = inputLine.replace("DTSTART:", "");
-				jsonStringI = jsonStringI + "\"DTSTART\":\"" + inputLine +"\",\n" ;
-			}
-			if (inputLine.contains("DTEND:")) {
-				inputLine = inputLine.replace("DTEND:", "");
-				jsonStringI = jsonStringI + "\"DTEND\":\"" + inputLine +"\",\n" ;
-			}
-			if (inputLine.contains("SUMMARY:")) {
-				inputLine = inputLine.replace("SUMMARY:", "");
-				jsonStringI = jsonStringI + "\"SUMMARY\":\"" + inputLine +"\",\n" ;
-			}
-			if (inputLine.contains("LOCATION:")) {
-				inputLine = inputLine.replace("LOCATION:", "");
-				jsonStringI = jsonStringI + "\"LOCATION\":\"" + inputLine +"\",\n" ;
-			}
-			else if(inputLine.compareTo("END:VEVENT")==0 && isInsideEvent) {
-				jsonStringI = jsonStringI + "\"END\":\"VEVENT\",\n}\n";
-			}
-		}
-		jsonStringI += "]";
-		writer.write(jsonStringI);
 
+
+		while ((inputLine = br.readLine()) != null) {
+
+			inputLine = inputLine.replaceAll("\"","'");
+
+			if (inputLine.contains("BEGIN:VEVENT")) {
+				jsonStringI = jsonStringI + "{\n"; isInsideEvent = true; 
+				continue;}
+
+			if (!isInsideEvent) {continue;}
+
+			if (inputLine.contains("END:VEVENT")) { 
+				jsonStringI = jsonStringI + "},\n"; 
+				isInsideEvent = false; 
+				continue;
+			}
+
+
+			if (inputLine.contains("DTSTAMP:") || inputLine.contains("DTSTART:") || inputLine.contains("DTEND:") ||
+
+					inputLine.contains("SUMMARY:") || inputLine.contains("UID:") || inputLine.contains("DESCRIPTION:") ||
+
+					inputLine.contains("LOCATION:"))            
+
+				jsonStringI =  jsonStringI + "\"" + inputLine.replaceFirst(":","\":\"") + "\",\n";
+
+			else jsonStringI = jsonStringI.substring(0, jsonStringI.length() - 3) + inputLine.substring(1, inputLine.length()) + "\",\n";
+
+		}
+
+		if (isInsideEvent) jsonStringI += "}]"; else jsonStringI += "]";
+
+		writer.write(jsonStringI);
 		br.close();
 		writer.close();
-	
+		
 		while ((inputLineHugo = br2.readLine()) != null) {
-			if(inputLineHugo.compareTo("BEGIN:VEVENT")==0) {
-				jsonStringH = jsonStringH +"\"BEGIN\":\"VEVENT\",\n" ;
-				isInsideEvent2 = true;
+
+			inputLineHugo = inputLineHugo.replaceAll("\"","'");
+
+			if (inputLineHugo.contains("BEGIN:VEVENT")) {
+				jsonStringH = jsonStringH + "{\n"; isInsideEvent2 = true; 
+				continue;}
+
+			if (!isInsideEvent2) {continue;}
+
+			if (inputLineHugo.contains("END:VEVENT")) { 
+				jsonStringH = jsonStringH + "},\n"; 
+				isInsideEvent2 = false; 
+				continue;
 			}
-			else if (inputLineHugo.contains("DTSTART:")) {
-				inputLineHugo = inputLineHugo.replace("DTSTART:", "");
-				jsonStringH = jsonStringH + "\"DTSTART\":\"" + inputLineHugo + "\",\n" ;
-			}
-			else if (inputLineHugo.contains("DTEND:")) {
-				inputLineHugo = inputLineHugo.replace("DTEND:", "");
-				jsonStringH = jsonStringH + "\"DTEND\":\"" + inputLineHugo + "\",\n" ;
-			}
-			else if (inputLineHugo.contains("SUMMARY:")) {
-				inputLineHugo = inputLineHugo.replace("SUMMARY:", "");
-				jsonStringH = jsonStringH + "\"SUMMARY\":\"" + inputLineHugo + "\",\n" ;
-			}
-			else if (inputLineHugo.contains("LOCATION:")) {
-				inputLineHugo = inputLineHugo.replace("LOCATION:", "");
-				jsonStringH = jsonStringH + "\"LOCATION\":\"" + inputLineHugo + "\",\n" ;
-			}
-			else if(inputLineHugo.compareTo("END:VEVENT")==0 && isInsideEvent2) {
-				jsonStringH = jsonStringH + "\"END\":\"VEVENT\",\n}\n";
-			}
+
+
+			if (inputLineHugo.contains("DTSTAMP:") || inputLineHugo.contains("DTSTART:") || inputLineHugo.contains("DTEND:") ||
+
+					inputLineHugo.contains("SUMMARY:") || inputLineHugo.contains("UID:") || inputLineHugo.contains("DESCRIPTION:") ||
+
+					inputLineHugo.contains("LOCATION:"))            
+
+				jsonStringH =  jsonStringH + "\"" + inputLineHugo.replaceFirst(":","\":\"") + "\",\n";
+
+			else jsonStringH = jsonStringH.substring(0, jsonStringH.length() - 3) + inputLineHugo.substring(1, inputLineHugo.length()) + "\",\n";
+
 		}
 
-		jsonStringH += "]";
-		writerHugo.write(jsonStringH);
-			System.out.println(jsonStringH);
-		br2.close();
-		writerHugo.close();
-		
+		if (isInsideEvent2) jsonStringH += "}]"; else jsonStringH += "]";
+	
+				writerHugo.write(jsonStringH);
+				br2.close();
+				writerHugo.close();
+
 	}
 
 }
