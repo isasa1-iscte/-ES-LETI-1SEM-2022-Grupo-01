@@ -6,7 +6,7 @@ import java.net.URL;
 import java.io.File;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.FileWriter;
-
+//
 public class CalendarioFenix {
 
 	//	Class that fetches Fenix Calendar and converts into json
