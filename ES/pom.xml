@@ -3,6 +3,10 @@
   <groupId>Grupo01</groupId>
   <artifactId>ES</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <properties>
+  <sonar.organization>es20222023</sonar.organization>
+  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+</properties>
   <dependencies>
   	<dependency>
   		<groupId>junit</groupId>
