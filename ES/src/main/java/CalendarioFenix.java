@@ -10,7 +10,7 @@ import java.io.FileWriter;
 public class CalendarioFenix {
 
 	//	Class that fetches Fenix Calendar and converts into json
-
+	// ...
 	public static void main(String[] args) throws IOException{
 		String httpsURLI = "https://fenix.iscte-iul.pt/publico/publicPersonICalendar.do?method=iCalendar&username=isasa1@iscte.pt&password=zLCpZLCYvhVBeyUsaEsd4ZNeFKdfHPgYzim2ITS5INtWNQzHAKsk1gfaBLNnhnCLcc5WGxYDKqmBz9OAbulLqWAn2NDiHQn7kfyqZ4M8WQwcuiZXvAWb9Oz55wXjyeRc";
 		URL iURL = new URL(httpsURLI);
